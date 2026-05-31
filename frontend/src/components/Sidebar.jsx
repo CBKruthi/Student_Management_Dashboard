@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
-  const { logout } = useAuth();
+  const { logout, adminInfo } = useAuth();
 
   return (
     <div className="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 bg-white border-r border-slate-200">
@@ -53,14 +53,25 @@ const Sidebar = () => {
           </nav>
         </div>
         
-        <div className="flex-shrink-0 flex border-t border-slate-200 p-4">
+        <div className="flex-shrink-0 border-t border-slate-200 p-4">
+          <div className="flex items-center gap-3 mb-4 px-2">
+            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+              {adminInfo?.fullName ? adminInfo.fullName.charAt(0).toUpperCase() : 'A'}
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-sm font-medium text-slate-900 truncate">
+                {adminInfo?.fullName || 'Administrator'}
+              </p>
+              <p className="text-xs text-slate-500 truncate">
+                {adminInfo?.email || 'admin@example.com'}
+              </p>
+            </div>
+          </div>
           <button
             onClick={logout}
-            className="flex-shrink-0 w-full text-left block text-slate-600 hover:text-red-600 transition-colors duration-200"
+            className="w-full text-left block text-slate-600 hover:text-red-600 transition-colors duration-200 bg-slate-50 hover:bg-red-50 rounded-lg px-3 py-2 text-sm font-medium"
           >
-            <div className="px-3 py-2 text-sm font-medium">
-              Sign Out
-            </div>
+            Sign Out
           </button>
         </div>
       </div>
