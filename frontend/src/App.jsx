@@ -5,10 +5,12 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import Overview from './pages/Overview';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Toaster richColors position="top-right" />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -16,10 +18,11 @@ function App() {
         
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<Overview />} />
+          <Route path="/students" element={<Dashboard />} />
         </Route>
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

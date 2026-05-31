@@ -84,7 +84,7 @@ const Dashboard = () => {
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <button
             onClick={() => handleOpenModal()}
-            className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/30 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all"
+            className="flex items-center gap-2 rounded bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition-all"
           >
             <Plus size={18} />
             Add Student
@@ -100,7 +100,7 @@ const Dashboard = () => {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="block w-full rounded-xl border-0 py-2.5 pl-10 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm transition-all"
+          className="block w-full rounded border-0 py-2.5 pl-10 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-1 focus:ring-inset focus:ring-black sm:text-sm transition-all"
           placeholder="Search by ID or Name..."
         />
       </div>
