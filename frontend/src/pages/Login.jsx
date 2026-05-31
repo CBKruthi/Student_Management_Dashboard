@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Lock, Mail, Loader2, ShieldCheck } from 'lucide-react';
 
@@ -31,7 +31,10 @@ const Login = () => {
           Admin Portal
         </h2>
         <p className="mt-2 text-center text-sm text-slate-600">
-          Sign in to manage student records securely
+          Sign in to manage student records securely or{' '}
+          <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500 hover:underline">
+            create a new account
+          </Link>
         </p>
       </div>
 
