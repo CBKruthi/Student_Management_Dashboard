@@ -9,13 +9,18 @@ const getStudents = async (req, res) => {
   let query = {};
   if (keyword) {
     query = {
-      $text: { $search: keyword }
+      $or: [
+        { fullName: { $regex: keyword, $options: 'i' } },
+        { emailId: { $regex: keyword, $options: 'i' } },
+        { studentId: { $regex: keyword, $options: 'i' } }
+      ]
     };
   }
 
   try {
     const students = await Student.find(query)
-      .populate('department', 'name')
+      .populate('category', 'name')
+      .populate('program', 'name')
       .populate('course', 'name')
       .sort({ createdAt: -1 });
     res.json(students);
@@ -30,7 +35,8 @@ const getStudents = async (req, res) => {
 const getStudentById = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id)
-      .populate('department', 'name')
+      .populate('category', 'name')
+      .populate('program', 'name')
       .populate('course', 'name');
     if (student) {
       res.json(student);
@@ -46,7 +52,7 @@ const getStudentById = async (req, res) => {
 // @route   POST /api/students
 // @access  Private (Admin)
 const addStudent = async (req, res) => {
-  const { fullName, emailId, phoneNumber, course, department, address } = req.body;
+  const { fullName, emailId, phoneNumber, course, program, category, address } = req.body;
 
   try {
     const student = new Student({
@@ -54,7 +60,8 @@ const addStudent = async (req, res) => {
       emailId,
       phoneNumber,
       course,
-      department,
+      program,
+      category,
       address,
     });
 
@@ -77,7 +84,8 @@ const updateStudent = async (req, res) => {
       student.emailId = req.body.emailId || student.emailId;
       student.phoneNumber = req.body.phoneNumber || student.phoneNumber;
       student.course = req.body.course || student.course;
-      student.department = req.body.department || student.department;
+      student.program = req.body.program || student.program;
+      student.category = req.body.category || student.category;
       student.address = req.body.address || student.address;
 
       const updatedStudent = await student.save();

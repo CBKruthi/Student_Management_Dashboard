@@ -1,5 +1,6 @@
 const Student = require('../models/Student');
-const Department = require('../models/Department');
+const Category = require('../models/Category');
+const Program = require('../models/Program');
 const Course = require('../models/Course');
 
 // @desc    Get dashboard summary statistics
@@ -8,31 +9,32 @@ const Course = require('../models/Course');
 const getDashboardSummary = async (req, res) => {
   try {
     const totalStudents = await Student.countDocuments();
-    const totalDepartments = await Department.countDocuments();
+    const totalCategories = await Category.countDocuments();
+    const totalPrograms = await Program.countDocuments();
     const totalCourses = await Course.countDocuments();
 
-    // Aggregate student count by department
-    const departmentDistribution = await Student.aggregate([
+    // Aggregate student count by program
+    const programDistribution = await Student.aggregate([
       {
         $group: {
-          _id: '$department',
+          _id: '$program',
           count: { $sum: 1 },
         },
       },
       {
         $lookup: {
-          from: 'departments',
+          from: 'programs',
           localField: '_id',
           foreignField: '_id',
-          as: 'departmentInfo',
+          as: 'programInfo',
         },
       },
       {
-        $unwind: '$departmentInfo',
+        $unwind: '$programInfo',
       },
       {
         $project: {
-          name: '$departmentInfo.name',
+          name: '$programInfo.name',
           count: 1,
           _id: 0,
         },
@@ -69,7 +71,8 @@ const getDashboardSummary = async (req, res) => {
 
     // Get 5 most recent students
     const recentStudents = await Student.find()
-      .populate('department', 'name')
+      .populate('category', 'name')
+      .populate('program', 'name')
       .populate('course', 'name')
       .sort({ createdAt: -1 })
       .limit(5);
@@ -77,10 +80,11 @@ const getDashboardSummary = async (req, res) => {
     res.json({
       metrics: {
         totalStudents,
-        totalDepartments,
+        totalCategories,
+        totalPrograms,
         totalCourses,
       },
-      departmentDistribution,
+      programDistribution,
       courseDistribution,
       recentStudents,
     });

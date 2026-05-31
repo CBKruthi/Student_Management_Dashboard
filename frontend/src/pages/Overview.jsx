@@ -13,10 +13,10 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-import { Users, BookOpen, Building2 } from 'lucide-react';
+import { Users, BookOpen, Layers } from 'lucide-react';
 import { toast } from 'sonner';
 
-const COLORS = ['#000000', '#334155', '#64748b', '#94a3b8', '#cbd5e1'];
+const COLORS = ['#3b82f6', '#8b5cf6', '#14b8a6', '#f43f5e', '#f59e0b', '#06b6d4'];
 
 const Overview = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -64,35 +64,35 @@ const Overview = () => {
             <Users className="text-slate-600" size={24} />
           </div>
         </div>
-        <div className="bg-white px-6 py-5 border border-slate-200 rounded flex items-center justify-between">
+        <div className="bg-white px-6 py-5 border border-slate-200 rounded flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-sm font-medium text-slate-500">Departments</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight text-black">{analytics?.metrics.totalDepartments}</p>
+            <p className="text-sm font-medium text-slate-500">Total Programs</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-800">{analytics?.metrics.totalPrograms}</p>
           </div>
-          <div className="bg-slate-50 p-3 rounded">
-            <Building2 className="text-slate-600" size={24} />
+          <div className="bg-purple-50 p-3 rounded text-purple-600">
+            <Layers size={24} />
           </div>
         </div>
-        <div className="bg-white px-6 py-5 border border-slate-200 rounded flex items-center justify-between">
+        <div className="bg-white px-6 py-5 border border-slate-200 rounded flex items-center justify-between shadow-sm">
           <div>
-            <p className="text-sm font-medium text-slate-500">Courses</p>
-            <p className="mt-2 text-3xl font-semibold tracking-tight text-black">{analytics?.metrics.totalCourses}</p>
+            <p className="text-sm font-medium text-slate-500">Total Courses</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-800">{analytics?.metrics.totalCourses}</p>
           </div>
-          <div className="bg-slate-50 p-3 rounded">
-            <BookOpen className="text-slate-600" size={24} />
+          <div className="bg-teal-50 p-3 rounded text-teal-600">
+            <BookOpen size={24} />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Department Distribution (Pie Chart) */}
-        <div className="bg-white p-6 border border-slate-200 rounded">
-          <h3 className="text-sm font-medium text-slate-900 mb-6">Student Distribution by Department</h3>
+        {/* Program Distribution (Pie Chart) */}
+        <div className="bg-white p-6 border border-slate-200 rounded shadow-sm">
+          <h3 className="text-sm font-medium text-slate-900 mb-6">Student Distribution by Program</h3>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={analytics?.departmentDistribution}
+                  data={analytics?.programDistribution}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -100,7 +100,7 @@ const Overview = () => {
                   paddingAngle={2}
                   dataKey="count"
                 >
-                  {analytics?.departmentDistribution.map((entry, index) => (
+                  {analytics?.programDistribution.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -126,7 +126,7 @@ const Overview = () => {
                   cursor={{ fill: '#f8fafc' }}
                   contentStyle={{ backgroundColor: '#fff', border: '1px solid #e2e8f0', borderRadius: '4px' }}
                 />
-                <Bar dataKey="count" fill="#000000" radius={[4, 4, 0, 0]} barSize={40} />
+                <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -153,8 +153,8 @@ const Overview = () => {
                       <div className="text-xs text-slate-500">{student.studentId}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="text-sm text-slate-900">{student.course?.name || 'N/A'}</div>
-                      <div className="text-xs text-slate-500">{student.department?.name || 'N/A'}</div>
+                      <div className="text-sm text-slate-900 font-medium">{student.category?.name || 'N/A'} - {student.program?.name || 'N/A'}</div>
+                      <div className="text-xs text-blue-600 font-semibold mt-0.5">{student.course?.name || 'N/A'}</div>
                     </td>
                   </tr>
                 ))

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import Login from './pages/Login';
@@ -6,6 +5,7 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Overview from './pages/Overview';
+import AcademicStructure from './pages/AcademicStructure';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Overview />} />
           <Route path="/students" element={<Dashboard />} />
+          <Route path="/academic-structure" element={<AcademicStructure />} />
         </Route>
       </Routes>
     </AuthProvider>

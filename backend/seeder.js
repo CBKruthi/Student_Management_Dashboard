@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Admin = require('./models/Admin');
 const Counter = require('./models/Counter');
-const Department = require('./models/Department');
+const Category = require('./models/Category');
+const Program = require('./models/Program');
 const Course = require('./models/Course');
 const Student = require('./models/Student');
 const connectDB = require('./config/db');
@@ -12,10 +13,11 @@ const importData = async () => {
   try {
     await connectDB();
 
-    // Clear existing data to prevent duplicates
+    // Clear existing data
     await Admin.deleteMany();
     await Counter.deleteMany();
-    await Department.deleteMany();
+    await Category.deleteMany();
+    await Program.deleteMany();
     await Course.deleteMany();
     await Student.deleteMany();
 
@@ -31,21 +33,23 @@ const importData = async () => {
     // 2. Initialize Counter
     await Counter.create({ _id: 'studentId', seq: 1000 });
 
-    // 3. Seed Departments
-    const deptEngineering = await Department.create({ name: 'Engineering' });
-    const deptScience = await Department.create({ name: 'Science' });
-    const deptBusiness = await Department.create({ name: 'Business' });
+    // 3. Seed Hierarchy
+    const catTech = await Category.create({ name: 'Technical' });
+    const catMgmt = await Category.create({ name: 'Management' });
 
-    // 4. Seed Courses
+    const progBTech = await Program.create({ name: 'B.Tech', category: catTech._id });
+    const progBE = await Program.create({ name: 'B.E.', category: catTech._id });
+    const progMBA = await Program.create({ name: 'MBA', category: catMgmt._id });
+
     await Course.insertMany([
-      { name: 'B.Tech CSE', department: deptEngineering._id },
-      { name: 'B.Tech ECE', department: deptEngineering._id },
-      { name: 'B.Sc Physics', department: deptScience._id },
-      { name: 'BBA', department: deptBusiness._id },
-      { name: 'MBA', department: deptBusiness._id },
+      { name: 'CSE', program: progBTech._id },
+      { name: 'ECE', program: progBTech._id },
+      { name: 'Mechanical', program: progBE._id },
+      { name: 'Finance', program: progMBA._id },
+      { name: 'Marketing', program: progMBA._id },
     ]);
 
-    console.log('Data Imported successfully (Admin, Departments, Courses)');
+    console.log('Data Imported successfully (3-Tier Hierarchy Seeded)');
     process.exit();
   } catch (error) {
     console.error(`Error: ${error.message}`);

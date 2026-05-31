@@ -27,10 +27,15 @@ const studentSchema = new mongoose.Schema({
     ref: 'Course',
     required: [true, 'Course is required'],
   },
-  department: {
+  category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Department',
-    required: [true, 'Department is required'],
+    ref: 'Category',
+    required: [true, 'Category is required'],
+  },
+  program: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Program',
+    required: [true, 'Program is required'],
   },
   address: {
     type: String,

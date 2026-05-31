@@ -19,7 +19,7 @@ const StudentTable = ({ students, onEdit, onDelete }) => {
             <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-slate-900 sm:pl-6">Student ID</th>
             <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-slate-900">Name</th>
             <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-slate-900">Contact</th>
-            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-slate-900">Department</th>
+            <th scope="col" className="px-3 py-3.5 text-left text-xs font-semibold text-slate-900">Academic Path</th>
             <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
               <span className="sr-only">Actions</span>
             </th>
@@ -39,8 +39,8 @@ const StudentTable = ({ students, onEdit, onDelete }) => {
                 <div className="text-xs">{student.phoneNumber}</div>
               </td>
               <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
-                <div className="text-slate-900">{student.department?.name || 'N/A'}</div>
-                <div className="text-xs">{student.course?.name || 'N/A'}</div>
+                <div className="text-slate-900 font-medium">{student.category?.name || 'N/A'} - {student.program?.name || 'N/A'}</div>
+                <div className="text-xs text-blue-600 font-semibold mt-0.5">{student.course?.name || 'N/A'}</div>
               </td>
               <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                 <button
