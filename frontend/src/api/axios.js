@@ -2,7 +2,8 @@ import axios from 'axios';
 
 // Configure Axios
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // Hardcoding for local dev since Vite proxy is sometimes flaky
+  // Use VITE_API_URL if defined (e.g. for Vercel), otherwise fallback to localhost for dev
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', 
 });
 
 // Request Interceptor
