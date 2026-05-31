@@ -1,0 +1,137 @@
+import React, { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
+
+const StudentFormModal = ({ isOpen, onClose, initialData, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    emailId: '',
+    phoneNumber: '',
+    courseName: '',
+    department: '',
+    address: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    } else {
+      setFormData({
+        fullName: '',
+        emailId: '',
+        phoneNumber: '',
+        courseName: '',
+        department: '',
+        address: '',
+      });
+    }
+    setErrors({});
+  }, [initialData, isOpen]);
+
+  if (!isOpen) return null;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for the field being edited
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required';
+    if (!formData.emailId.trim()) {
+      newErrors.emailId = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailId)) {
+      newErrors.emailId = 'Invalid email format';
+    }
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Phone Number is required';
+    } else if (!/^\d{10}$/.test(formData.phoneNumber.replace(/\D/g, ''))) {
+      newErrors.phoneNumber = 'Phone Number must contain at least 10 digits';
+    }
+    if (!formData.courseName.trim()) newErrors.courseName = 'Course is required';
+    if (!formData.department.trim()) newErrors.department = 'Department is required';
+    if (!formData.address.trim()) newErrors.address = 'Address is required';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      onSubmit(formData);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
+      <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={onClose} />
+      
+      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto transform transition-all">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+          <h3 className="text-lg font-semibold text-slate-900">
+            {initialData ? 'Edit Student' : 'Add New Student'}
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-500 bg-slate-50 hover:bg-slate-100 p-1.5 rounded-full transition-colors">
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+            <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} className={`block w-full rounded-xl border-0 py-2.5 px-3 text-slate-900 shadow-sm ring-1 ring-inset ${errors.fullName ? 'ring-red-300 focus:ring-red-600' : 'ring-slate-300 focus:ring-blue-600'} placeholder:text-slate-400 focus:ring-2 focus:ring-inset sm:text-sm transition-all`} />
+            {errors.fullName && <p className="mt-1 text-xs text-red-600">{errors.fullName}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Email ID</label>
+            <input type="email" name="emailId" value={formData.emailId} onChange={handleChange} className={`block w-full rounded-xl border-0 py-2.5 px-3 text-slate-900 shadow-sm ring-1 ring-inset ${errors.emailId ? 'ring-red-300 focus:ring-red-600' : 'ring-slate-300 focus:ring-blue-600'} placeholder:text-slate-400 focus:ring-2 focus:ring-inset sm:text-sm transition-all`} />
+            {errors.emailId && <p className="mt-1 text-xs text-red-600">{errors.emailId}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+            <input type="tel" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className={`block w-full rounded-xl border-0 py-2.5 px-3 text-slate-900 shadow-sm ring-1 ring-inset ${errors.phoneNumber ? 'ring-red-300 focus:ring-red-600' : 'ring-slate-300 focus:ring-blue-600'} placeholder:text-slate-400 focus:ring-2 focus:ring-inset sm:text-sm transition-all`} />
+            {errors.phoneNumber && <p className="mt-1 text-xs text-red-600">{errors.phoneNumber}</p>}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Course</label>
+              <input type="text" name="courseName" value={formData.courseName} onChange={handleChange} className={`block w-full rounded-xl border-0 py-2.5 px-3 text-slate-900 shadow-sm ring-1 ring-inset ${errors.courseName ? 'ring-red-300 focus:ring-red-600' : 'ring-slate-300 focus:ring-blue-600'} placeholder:text-slate-400 focus:ring-2 focus:ring-inset sm:text-sm transition-all`} />
+              {errors.courseName && <p className="mt-1 text-xs text-red-600">{errors.courseName}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Department</label>
+              <input type="text" name="department" value={formData.department} onChange={handleChange} className={`block w-full rounded-xl border-0 py-2.5 px-3 text-slate-900 shadow-sm ring-1 ring-inset ${errors.department ? 'ring-red-300 focus:ring-red-600' : 'ring-slate-300 focus:ring-blue-600'} placeholder:text-slate-400 focus:ring-2 focus:ring-inset sm:text-sm transition-all`} />
+              {errors.department && <p className="mt-1 text-xs text-red-600">{errors.department}</p>}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Address</label>
+            <textarea name="address" rows="3" value={formData.address} onChange={handleChange} className={`block w-full rounded-xl border-0 py-2.5 px-3 text-slate-900 shadow-sm ring-1 ring-inset ${errors.address ? 'ring-red-300 focus:ring-red-600' : 'ring-slate-300 focus:ring-blue-600'} placeholder:text-slate-400 focus:ring-2 focus:ring-inset sm:text-sm transition-all`} />
+            {errors.address && <p className="mt-1 text-xs text-red-600">{errors.address}</p>}
+          </div>
+
+          <div className="pt-4 flex justify-end gap-3 border-t border-slate-100">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors">
+              Cancel
+            </button>
+            <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-500 shadow-sm shadow-blue-500/30 transition-all">
+              {initialData ? 'Update Student' : 'Save Student'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default StudentFormModal;
