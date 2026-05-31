@@ -6,6 +6,9 @@ const authRoutes = require('./routes/authRoutes');
 
 dotenv.config({ path: '../.env' }); // Assuming .env is at root
 
+const studentRoutes = require('./routes/studentRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
+
 const app = express();
 
 // Connect to database
@@ -17,7 +20,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/students', require('./routes/studentRoutes'));
+app.use('/api/students', studentRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'success', message: 'API is running' });

@@ -29,7 +29,9 @@ const getStudents = async (req, res) => {
 // @access  Private (Admin)
 const getStudentById = async (req, res) => {
   try {
-    const student = await Student.findById(req.params.id);
+    const student = await Student.findById(req.params.id)
+      .populate('department', 'name')
+      .populate('course', 'name');
     if (student) {
       res.json(student);
     } else {
@@ -44,14 +46,14 @@ const getStudentById = async (req, res) => {
 // @route   POST /api/students
 // @access  Private (Admin)
 const addStudent = async (req, res) => {
-  const { fullName, emailId, phoneNumber, courseName, department, address } = req.body;
+  const { fullName, emailId, phoneNumber, course, department, address } = req.body;
 
   try {
     const student = new Student({
       fullName,
       emailId,
       phoneNumber,
-      courseName,
+      course,
       department,
       address,
     });
@@ -74,7 +76,7 @@ const updateStudent = async (req, res) => {
       student.fullName = req.body.fullName || student.fullName;
       student.emailId = req.body.emailId || student.emailId;
       student.phoneNumber = req.body.phoneNumber || student.phoneNumber;
-      student.courseName = req.body.courseName || student.courseName;
+      student.course = req.body.course || student.course;
       student.department = req.body.department || student.department;
       student.address = req.body.address || student.address;
 
